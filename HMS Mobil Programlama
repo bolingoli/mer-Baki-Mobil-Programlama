@@ -1,0 +1,119 @@
+open class Item(val name: String, val price: Double)
+
+class Food(name: String, price: Double, val weight: String) : Item(name, price)
+
+class Cloth(name: String, price: Double, val type: String) : Item(name, price)
+
+class ShoppingList {
+    private val items: MutableList<Item> = mutableListOf()
+
+    fun addItem(item: Item) {
+        items.add(item)
+    }
+
+    fun displayItems() {
+        for (item in items) {
+            if (item is Food) {
+                println("${item.name} (${item.price}): ${item.weight} kg")
+            } else if (item is Cloth) {
+                println("${item.name} (${item.price}): ${item.type}")
+            } else {
+                println("${item.name} (${item.price})")
+            }
+        }
+    }
+
+    fun deleteItem(index: Int) {
+        if (index >= 0 && index < items.size) {
+            items.removeAt(index)
+        } else {
+            println("Invalid index")
+        }
+    }
+}
+
+fun main() {
+    val list = ShoppingList()
+    while (true) {
+        println("1) Add Item")
+        println("2) Display Item")
+        println("3) Delete Item")
+        println("4) Exit")
+
+        print("Enter your choice: ")
+        val choice = readLine()?.toIntOrNull()
+        if (choice == null) {
+            println("Invalid input")
+            continue
+        }
+
+        when (choice) {
+            1 -> {
+                println("Enter the type of item (1: Food, 2: Cloth):")
+                val itemType = readLine()?.toIntOrNull()
+                if (itemType == null) {
+                    println("Invalid input")
+                    continue
+                }
+
+                print("Enter the name: ")
+                val name = readLine()
+                if (name.isNullOrBlank()) {
+                    println("Invalid input")
+                    continue
+                }
+
+                print("Enter the price: ")
+                val price = readLine()?.toDoubleOrNull()
+                if (price == null) {
+                    println("Invalid input")
+                    continue
+                }
+
+                when (itemType) {
+                    1 -> {
+                        print("Enter the weight: ")
+                        val weight = readLine()
+                        if (weight.isNullOrBlank()) {
+                            println("Invalid input")
+                            continue
+                        }
+                        list.addItem(Food(name, price, weight))
+                    }
+                    2 -> {
+                        print("Enter the type: ")
+                        val type = readLine()
+                        if (type.isNullOrBlank()) {
+                            println("Invalid input")
+                            continue
+                        }
+                        list.addItem(Cloth(name, price, type))
+                    }
+                    else -> {
+                        println("Invalid input")
+                        continue
+                    }
+                }
+            }
+            2 -> {
+                list.displayItems()
+            }
+            3 -> {
+                print("Enter the index of the item to delete: ")
+                val index = readLine()?.toIntOrNull()
+                if (index == null) {
+                    println("Invalid input")
+                    continue
+                }
+                list.deleteItem(index)
+            }
+            4 -> {
+                println("Goodbye!")
+                return
+            }
+            else -> {
+                println("Invalid input")
+            }
+        }
+    }
+}
